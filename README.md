@@ -8,7 +8,7 @@ Fork → `.py` у **`students/`** → push → [PythonAnywhere](https://www.pyth
 |------|-----|
 | 1 | **Fork** на GitHub |
 | 2 | **`python tools/pa_setup_gui.py`** — згенерувати команди для консолі PA |
-| 3 | [SETUP.md](SETUP.md) — Web, webhook, токени |
+| 3 | [SETUP.md](SETUP.md) — Web, webhook (приклад: [csctemplate](docs/EXAMPLE_CSCTEMPLATE.md)) |
 | 4 | Код у `students/` |
 
 ## `students/`

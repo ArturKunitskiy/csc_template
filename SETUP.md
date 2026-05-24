@@ -1,22 +1,24 @@
 # PythonAnywhere — налаштування
 
+**Приклад з реального тесту:** акаунт `csctemplate`, сайт https://csctemplate.pythonanywhere.com, панель https://www.pythonanywhere.com/user/csctemplate/ — деталі в [docs/EXAMPLE_CSCTEMPLATE.md](docs/EXAMPLE_CSCTEMPLATE.md). У командах нижче замініть `csctemplate` на **свій** логін.
+
 ## Швидко: GUI-майстер (рекомендовано)
 
-На **своєму комп’ютері** (не на PA):
+На **своєму комп’ютері**:
 
 ```bash
 python tools/pa_setup_gui.py
 ```
 
-Заповніть поля → **Згенерувати** → скопіюйте блок **«1. Bash»** у консоль PythonAnywhere. Блоки 2–3 — у Web tab і GitHub.
+За замовчуванням підставлено `csctemplate` + `www.pythonanywhere.com`. Змініть логін і URL форку → **Згенерувати** → блок **«1. Bash»** у [Bash-консоль PA](https://www.pythonanywhere.com/user/csctemplate/consoles/) (у вас буде `/user/ВАШ_ЛОГІН/consoles/...`).
 
 ---
 
 ## 1. Fork і clone на PA
 
 ```bash
-git clone https://github.com/ВАШ_ЛОГІН/csc_template.git ~/csc_template
-cd ~/csc_template
+git clone https://github.com/ВАШ_GITHUB/csc_template.git /home/csctemplate/csc_template
+cd /home/csctemplate/csc_template
 git config merge.ours.driver true
 
 mkdir -p ~/.virtualenvs
@@ -28,52 +30,52 @@ pip install -r requirements.txt
 
 > `mkvirtualenv` на PA часто **не працює** — використовуйте `python3.10 -m venv`.
 
-Або: `bash scripts/bootstrap_pythonanywhere.sh` (після `export GITHUB_REPO=...`).
-
 ---
 
 ## 2. Web app — усі поля обов’язкові
 
 **Web** → **Add a new web app** → **Manual configuration** → Python **3.10**.
 
-| Поле | Значення |
-|------|----------|
-| **Source code** | `/home/ВАШ_ЛОГІН/csc_template` |
-| **Working directory** | `/home/ВАШ_ЛОГІН/csc_template` |
-| **Virtualenv** | `/home/ВАШ_ЛОГІН/.virtualenvs/csc-venv` (повний шлях) |
+| Поле | Приклад (csctemplate) |
+|------|------------------------|
+| **Source code** | `/home/csctemplate/csc_template` |
+| **Working directory** | `/home/csctemplate/csc_template` |
+| **Virtualenv** | `/home/csctemplate/.virtualenvs/csc-venv` |
 
-**WSGI configuration file** — замініть вміст:
+**WSGI configuration file**:
 
 ```python
 import sys
-sys.path.insert(0, "/home/ВАШ_ЛОГІН/csc_template")
+sys.path.insert(0, "/home/csctemplate/csc_template")
 from wsgi import application
 ```
 
-Натисніть зелену кнопку **Reload** після будь-яких змін.
-
-Перевірка: https://ВАШ_ЛОГІН.pythonanywhere.com/health
+**Reload** → перевірка: https://csctemplate.pythonanywhere.com/health
 
 ---
 
 ## 3. Змінні середовища
 
-**Web** → ваш сайт → **Environment variables**:
+**Web** → Environment variables (зразок у [.env.example](.env.example)):
 
-- Деплой: `REPO_PATH`, `GITHUB_WEBHOOK_SECRET`, `PA_WSGI_FILE`, `PA_USERNAME`, `PA_DOMAIN`
-- Ваші API: `TELEGRAM_BOT_TOKEN`, `WEATHER_API_KEY`, … — [docs/TOKENS.md](docs/TOKENS.md)
+```text
+REPO_PATH=/home/csctemplate/csc_template
+GITHUB_WEBHOOK_SECRET=<ваш_секрет>
+PA_WSGI_FILE=/var/www/csctemplate_pythonanywhere_com_wsgi.py
+PA_USERNAME=csctemplate
+PA_API_HOST=www.pythonanywhere.com
+PA_DOMAIN=csctemplate.pythonanywhere.com
+```
 
-`PA_WSGI_FILE` = `/var/www/вашлогін_pythonanywhere_com_wsgi.py` (шлях з Web → WSGI file).
-
-**Reload** після зміни змінних.
+API-ключі студента: [docs/TOKENS.md](docs/TOKENS.md). Після змін — **Reload**.
 
 ---
 
 ## 4. GitHub webhook
 
-| Поле | Значення |
-|------|----------|
-| Payload URL | `https://ВАШ_ЛОГІН.pythonanywhere.com/deploy-webhook` |
+| Поле | Приклад (csctemplate) |
+|------|------------------------|
+| Payload URL | `https://csctemplate.pythonanywhere.com/deploy-webhook` |
 | Secret | = `GITHUB_WEBHOOK_SECRET` |
 | Events | push |
 
@@ -90,21 +92,18 @@ def register(app):
         return "Мій проєкт"
 ```
 
-`git push` → сайт оновиться.
+`git push` → оновлення на PA.
 
 ---
 
 ## Telegram-бот
 
-- **Немає** «allowlist» в Account/Web — `api.telegram.org` уже в [глобальному списку PA](https://www.pythonanywhere.com/whitelist/).
-- На free tier потрібен **проксі PA** для `requests` — див. [docs/TELEGRAM_PA.md](docs/TELEGRAM_PA.md).
-- Приклад: `students/_example_bot.py` → скопіювати як `students/bot.py`.
-- **Always-on** (платний план):
+[docs/TELEGRAM_PA.md](docs/TELEGRAM_PA.md) · приклад `students/_example_bot.py` → `students/bot.py`
+
+Always-on:
 
 ```bash
-/home/ВАШ_ЛОГІН/.virtualenvs/csc-venv/bin/python /home/ВАШ_ЛОГІН/csc_template/run_students.py
+/home/csctemplate/.virtualenvs/csc-venv/bin/python /home/csctemplate/csc_template/run_students.py
 ```
 
-Токен `TELEGRAM_BOT_TOKEN` — також у **Environment** Always-on задачі.
-
-`python-telegram-bot` у шаблоні **не входить** у `requirements.txt` — лише `requests` (як у прикладі).
+`PA_API_HOST=www.pythonanywhere.com` — як у тестовому акаунті на **www**, не eu.

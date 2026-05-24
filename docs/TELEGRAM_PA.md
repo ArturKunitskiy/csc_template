@@ -28,7 +28,7 @@ https://help.pythonanywhere.com/pages/403ForbiddenError/#proxy-details
 1. **Tasks** → **Always-on tasks** → команда:
 
 ```bash
-/home/ВАШ_ЛОГІН/.virtualenvs/csc-venv/bin/python /home/ВАШ_ЛОГІН/csc_template/run_students.py
+/home/csctemplate/.virtualenvs/csc-venv/bin/python /home/csctemplate/csc_template/run_students.py
 ```
 
 2. **Environment variables** у задачі: `TELEGRAM_BOT_TOKEN=...` (ті самі ключі, що для сайту).

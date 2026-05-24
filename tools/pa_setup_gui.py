@@ -41,11 +41,16 @@ class SetupWizard(tk.Tk):
 
         self._fields: dict[str, tk.StringVar] = {}
         self._add_section(form, "Обліковий запис")
-        self._add_field(form, "pa_username", "Логін PythonAnywhere", "mylogin")
+        self._add_field(
+            form,
+            "pa_username",
+            "Логін PythonAnywhere",
+            "csctemplate",
+        )
         self._add_field(
             form,
             "pa_host",
-            "Хост API (www або eu)",
+            "PA API host (www = панель www.pythonanywhere.com/user/…)",
             "www.pythonanywhere.com",
         )
 
@@ -54,7 +59,7 @@ class SetupWizard(tk.Tk):
             form,
             "github_repo",
             "URL форку (git clone)",
-            "https://github.com/mylogin/csc_template.git",
+            "https://github.com/csctemplate/csc_template.git",
         )
         self._add_field(form, "project_name", "Папка на PA", "csc_template")
 
@@ -117,7 +122,10 @@ class SetupWizard(tk.Tk):
 
         ttk.Label(
             self,
-            text="Вставте блок «1. Bash» у консоль PythonAnywhere. Решту — у Web / GitHub вручну.",
+            text=(
+                "Блок «1. Bash» → Bash-консоль PA (напр. www.pythonanywhere.com/user/csctemplate/consoles/…). "
+                "Приклад шляхів: docs/EXAMPLE_CSCTEMPLATE.md"
+            ),
             wraplength=680,
         ).pack(padx=10, pady=(0, 8))
 

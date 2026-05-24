@@ -4,7 +4,8 @@
 
 set -euo pipefail
 
-GITHUB_REPO="${GITHUB_REPO:-https://github.com/YOUR_USER/csc_template.git}"
+# Приклад: csctemplate → /home/csctemplate/csc_template (див. docs/EXAMPLE_CSCTEMPLATE.md)
+GITHUB_REPO="${GITHUB_REPO:-https://github.com/csctemplate/csc_template.git}"
 PROJECT_DIR="${PROJECT_DIR:-$HOME/csc_template}"
 VENV_DIR="${VENV_DIR:-$HOME/.virtualenvs/csc-venv}"
 
@@ -33,7 +34,7 @@ echo "==> post-merge hook"
 HOOK="$PROJECT_DIR/.git/hooks/post-merge"
 cat > "$HOOK" <<HOOK_EOF
 #!/bin/sh
-touch "\${PA_WSGI_FILE:-/var/www/__REPLACE_USERNAME___pythonanywhere_com_wsgi.py}" 2>/dev/null || true
+touch "\${PA_WSGI_FILE:-/var/www/csctemplate_pythonanywhere_com_wsgi.py}" 2>/dev/null || true
 HOOK_EOF
 chmod +x "$HOOK"
 
@@ -44,7 +45,7 @@ echo "  Working directory: $PROJECT_DIR"
 echo "  Virtualenv:       $VENV_DIR"
 echo "  WSGI: import sys; sys.path.insert(0, '$PROJECT_DIR'); from wsgi import application"
 echo ""
-echo "GitHub webhook: https://YOURUSER.pythonanywhere.com/deploy-webhook"
+echo "GitHub webhook: https://csctemplate.pythonanywhere.com/deploy-webhook  # замініть логін"
 echo "Telegram: docs/TELEGRAM_PA.md (без allowlist в Account — його немає)"
 echo "GUI майстер: python tools/pa_setup_gui.py"
 echo ""
